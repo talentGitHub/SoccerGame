@@ -80,14 +80,11 @@ The executable will be created in: `FutsalGame/bin/Release/net10.0-windows/win-x
 1. **Starting the Game**: Press SPACE to start the match
 2. **Movement**: Use WASD keys to move your player around the field
 3. **Ball Control**: Move close to the ball to pick it up automatically
-4. **Passing**: Click the green PASS button or use it to pass to your nearest teammate
+4. **Passing**: Click the green PASS button to pass to your nearest teammate
 5. **Shooting**: Click the orange KICK button to shoot at goal with full power
-4. **Kicking**: Press SPACE while holding the ball to kick towards the opponent's goal
-   - Add vertical direction by holding W or S while kicking
-   - Or use the PASS button to pass to teammates
-   - Or use the KICK button for a powerful shot at goal
-5. **Scoring**: Get the ball into the opponent's goal (blue goal on the right)
-6. **Winning**: The team with the most goals when time expires wins!
+   - You can aim up/down by holding W or S while clicking KICK
+6. **Scoring**: Get the ball into the opponent's goal (blue goal on the right)
+7. **Winning**: The team with the most goals when time expires wins!
 
 ## Game Architecture
 

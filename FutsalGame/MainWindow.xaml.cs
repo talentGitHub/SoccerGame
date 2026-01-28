@@ -25,6 +25,11 @@ public partial class MainWindow : Window
     
     private const double FieldWidth = 1000;
     private const double FieldHeight = 600;
+    private const double MinPassDistance = 30.0;
+    private const double PassPower = 8.0;
+    private const double KickPower = 15.0;
+    private const double VerticalKickComponent = 0.5;
+    private const double StatusMessageTimeoutSeconds = 1.5;
 
     public MainWindow()
     {
@@ -451,6 +456,18 @@ public partial class MainWindow : Window
         Render();
     }
 
+    private void ShowStatusMessage(string message)
+    {
+        ActionStatusText.Text = message;
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(StatusMessageTimeoutSeconds) };
+        timer.Tick += (s, args) =>
+        {
+            ActionStatusText.Text = "";
+            timer.Stop();
+        };
+        timer.Start();
+    }
+
     private void PassButton_Click(object sender, RoutedEventArgs e)
     {
         if (_selectedPlayer == null || !_selectedPlayer.HasBall || !_gameTimer.IsEnabled)
@@ -465,7 +482,7 @@ public partial class MainWindow : Window
             if (player.Team == _selectedPlayer.Team && player.Id != _selectedPlayer.Id)
             {
                 double distance = GetDistance(_selectedPlayer.Position, player.Position);
-                if (distance < bestDistance && distance > 30) // Must be at least 30 pixels away
+                if (distance < bestDistance && distance > MinPassDistance)
                 {
                     bestDistance = distance;
                     bestTeammate = player;
@@ -483,28 +500,12 @@ public partial class MainWindow : Window
             passDirection.Normalize();
             
             // Pass with moderate power
-            _gameEngine.KickBall(_selectedPlayer, passDirection, 8.0);
-            
-            // Show feedback
-            ActionStatusText.Text = $"Passed to {bestTeammate.Role}!";
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
-            timer.Tick += (s, args) =>
-            {
-                ActionStatusText.Text = "";
-                timer.Stop();
-            };
-            timer.Start();
+            _gameEngine.KickBall(_selectedPlayer, passDirection, PassPower);
+            ShowStatusMessage($"Passed to {bestTeammate.Role}!");
         }
         else
         {
-            ActionStatusText.Text = "No teammate in range!";
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
-            timer.Tick += (s, args) =>
-            {
-                ActionStatusText.Text = "";
-                timer.Stop();
-            };
-            timer.Start();
+            ShowStatusMessage("No teammate in range!");
         }
     }
 
@@ -514,7 +515,7 @@ public partial class MainWindow : Window
             return;
 
         // Kick towards goal
-        Vector kickDirection = new Vector(1, 0);
+        Vector kickDirection;
         if (_selectedPlayer.Team == Team.Red)
         {
             kickDirection = new Vector(1, 0); // Kick right towards blue goal
@@ -525,23 +526,14 @@ public partial class MainWindow : Window
         }
 
         // Add vertical component based on current movement
-        if (_isWPressed) kickDirection.Y -= 0.5;
-        if (_isSPressed) kickDirection.Y += 0.5;
+        if (_isWPressed) kickDirection.Y -= VerticalKickComponent;
+        if (_isSPressed) kickDirection.Y += VerticalKickComponent;
 
         kickDirection.Normalize();
         
         // Kick with full power
-        _gameEngine.KickBall(_selectedPlayer, kickDirection, 15.0);
-        
-        // Show feedback
-        ActionStatusText.Text = "SHOT!";
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
-        timer.Tick += (s, args) =>
-        {
-            ActionStatusText.Text = "";
-            timer.Stop();
-        };
-        timer.Start();
+        _gameEngine.KickBall(_selectedPlayer, kickDirection, KickPower);
+        ShowStatusMessage("SHOT!");
     }
 
     private double GetDistance(Point p1, Point p2)

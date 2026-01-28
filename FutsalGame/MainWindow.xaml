@@ -68,7 +68,7 @@
                 
                 <!-- Control Instructions -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="Controls: WASD (Move) | SPACE (Pause) | R (Reset)" 
+                    <TextBlock Text="Controls: WASD (Move) | SPACE (Start/Pause) | R (Reset)" 
                               FontSize="14" 
                               Foreground="#aaaaaa"/>
                 </StackPanel>
