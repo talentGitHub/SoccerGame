@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futsal Game - Visual Mockup</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #2a2a2a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .window {
+            width: 1200px;
+            background: #2a2a2a;
+            border: 2px solid #444;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .header {
+            background: #1a1a1a;
+            border-bottom: 2px solid #333;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score-panel {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .team-score {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .team-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .red { color: #ff4444; }
+        .blue { color: #4444ff; }
+        
+        .score {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .timer {
+            text-align: center;
+        }
+        
+        .time {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .field-container {
+            background: #2a2a2a;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .field {
+            width: 1000px;
+            height: 600px;
+            background: linear-gradient(to bottom, #1e7c1e 0%, #1a6b1a 50%, #1e7c1e 100%);
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.7);
+        }
+        
+        .field-line {
+            position: absolute;
+            background: rgba(255,255,255,0.7);
+        }
+        
+        .center-line {
+            left: 50%;
+            top: 0;
+            width: 3px;
+            height: 100%;
+        }
+        
+        .center-circle {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255,255,255,0.7);
+            border-radius: 50%;
+            background: transparent;
+        }
+        
+        .center-spot {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+        }
+        
+        .goal {
+            position: absolute;
+            width: 20px;
+            height: 120px;
+            border: 3px solid rgba(255,255,255,0.7);
+            top: 240px;
+        }
+        
+        .goal-left {
+            left: 0;
+            background: rgba(255, 100, 100, 0.3);
+        }
+        
+        .goal-right {
+            right: 0;
+            background: rgba(100, 100, 255, 0.3);
+        }
+        
+        .penalty-box {
+            position: absolute;
+            width: 80px;
+            height: 180px;
+            border: 3px solid rgba(255,255,255,0.7);
+            background: transparent;
+            top: 210px;
+        }
+        
+        .penalty-left {
+            left: 0;
+        }
+        
+        .penalty-right {
+            right: 0;
+        }
+        
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .red-player {
+            background: radial-gradient(circle at 30% 30%, white, #dc3232 40%, #aa2020);
+        }
+        
+        .blue-player {
+            background: radial-gradient(circle at 30% 30%, white, #3232dc 40%, #2020aa);
+        }
+        
+        .selected {
+            border: 3px solid yellow;
+            box-shadow: 0 0 10px yellow;
+        }
+        
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, white, #e6e6e6 70%, #b4b4b4);
+            border: 2px solid #000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .ball-indicator {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px dashed white;
+            background: transparent;
+            transform: translate(-50%, -50%);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .footer {
+            background: #1a1a1a;
+            border-top: 2px solid #333;
+            padding: 12px;
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .info {
+            color: white;
+            margin-top: 20px;
+            max-width: 1200px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .info h2 {
+            color: #4444ff;
+            margin-top: 0;
+        }
+        
+        .info ul {
+            line-height: 1.8;
+        }
+        
+        .button-pass {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .button-pass:hover {
+            background: #45a049;
+        }
+        
+        .button-kick {
+            background: #FF5722;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .button-kick:hover {
+            background: #E64A19;
+        }
+        
+        .action-status {
+            color: #ffcc00;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <!-- Header with scores -->
+        <div class="header">
+            <div class="score-panel">
+                <div class="team-score">
+                    <span class="team-name red">RED TEAM</span>
+                    <span class="score">2</span>
+                </div>
+                
+                <div class="timer">
+                    <div class="time">05:42</div>
+                    <div class="status">Playing - Press SPACE to pause</div>
+                </div>
+                
+                <div class="team-score">
+                    <span class="score">3</span>
+                    <span class="team-name blue">BLUE TEAM</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Field -->
+        <div class="field-container">
+            <div class="field">
+                <!-- Field Lines -->
+                <div class="field-line center-line"></div>
+                <div class="center-circle"></div>
+                <div class="center-spot"></div>
+                
+                <!-- Goals -->
+                <div class="goal goal-left"></div>
+                <div class="goal goal-right"></div>
+                
+                <!-- Penalty Boxes -->
+                <div class="penalty-box penalty-left"></div>
+                <div class="penalty-box penalty-right"></div>
+                
+                <!-- Red Team Players -->
+                <div class="player red-player" style="left: 60px; top: 300px;">GK</div>
+                <div class="player red-player" style="left: 250px; top: 180px;">D</div>
+                <div class="player red-player" style="left: 250px; top: 420px;">D</div>
+                <div class="player red-player" style="left: 350px; top: 300px;">M</div>
+                <div class="player red-player selected" style="left: 480px; top: 320px;">F</div>
+                
+                <!-- Blue Team Players -->
+                <div class="player blue-player" style="left: 940px; top: 300px;">GK</div>
+                <div class="player blue-player" style="left: 750px; top: 180px;">D</div>
+                <div class="player blue-player" style="left: 750px; top: 420px;">D</div>
+                <div class="player blue-player" style="left: 650px; top: 300px;">M</div>
+                <div class="player blue-player" style="left: 550px; top: 280px;">F</div>
+                
+                <!-- Ball with possession indicator -->
+                <div class="ball-indicator" style="left: 480px; top: 320px;"></div>
+                <div class="ball" style="left: 480px; top: 320px;"></div>
+            </div>
+        </div>
+        
+        <!-- Footer with controls -->
+        <div class="footer">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="flex: 1; text-align: center;">Controls: WASD (Move) | SPACE (Start/Pause) | R (Reset)</span>
+                <div style="flex: 1; text-align: center;">
+                    <button class="button-pass">PASS</button>
+                    <button class="button-kick">KICK</button>
+                </div>
+                <span class="action-status" style="flex: 1; text-align: center;">Ready to play!</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <h2>🎮 Futsal Game - Visual Mockup</h2>
+        <p>This is a visual representation of the Windows WPF application. The actual game features:</p>
+        <ul>
+            <li><strong>Smooth 60 FPS gameplay</strong> with real-time physics</li>
+            <li><strong>5v5 team play</strong> - Control Red Team Forward (yellow border) against AI Blue Team</li>
+            <li><strong>AI teammates</strong> that automatically position and assist</li>
+            <li><strong>Ball physics</strong> with momentum, friction, and realistic movement</li>
+            <li><strong>Player stamina</strong> that depletes with movement and regenerates</li>
+            <li><strong>Smart AI</strong> that passes, shoots, and positions strategically</li>
+            <li><strong>10-minute matches</strong> with real-time scoring and timing</li>
+            <li><strong>High-quality graphics</strong> with gradients, shadows, and visual effects</li>
+            <li><strong>PASS button</strong> (green) - Pass to nearest teammate</li>
+            <li><strong>KICK button</strong> (orange) - Shoot at goal with full power</li>
+        </ul>
+        <p>The dashed circle indicates ball possession. The yellow border shows your controlled player.</p>
+        <p><strong>New!</strong> Use the dedicated PASS and KICK buttons for better control during gameplay!</p>
+    </div>
+</body>
+</html>
