@@ -199,15 +199,8 @@ public partial class MainWindow : Window
         // Update AI for blue team
         _aiController.UpdateAI(Team.Blue);
         
-        // Update AI for other red team players
-        foreach (var player in _gameEngine.Players)
-        {
-            if (player.Team == Team.Red && player.Id != _selectedPlayer?.Id)
-            {
-                _aiController.UpdateAI(Team.Red);
-                break;
-            }
-        }
+        // Update AI for other red team players (excluding the player-controlled one)
+        _aiController.UpdateAI(Team.Red, _selectedPlayer);
 
         // Update game engine
         _gameEngine.Update(deltaTime);

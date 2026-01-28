@@ -30,8 +30,8 @@ public class Ball
                 Position.Y + Velocity.Y * deltaTime
             );
 
-            // Apply friction
-            Velocity *= 0.98;
+            // Apply friction (delta-time adjusted for consistent physics)
+            Velocity *= Math.Pow(0.98, deltaTime * 60);
 
             // Stop if very slow
             if (Velocity.Length < 0.1)

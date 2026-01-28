@@ -33,13 +33,13 @@ public class Player
             Position.Y + Velocity.Y * deltaTime
         );
 
-        // Apply friction
-        Velocity *= 0.95;
+        // Apply friction (delta-time adjusted for consistent physics)
+        Velocity *= Math.Pow(0.95, deltaTime * 60);
 
-        // Regenerate stamina
+        // Regenerate stamina (delta-time adjusted)
         if (Stamina < 100)
         {
-            Stamina += 0.1 * deltaTime;
+            Stamina += 0.1 * deltaTime * 60;
             if (Stamina > 100) Stamina = 100;
         }
     }
@@ -57,7 +57,7 @@ public class Player
                 Velocity = Velocity / currentSpeed * MaxSpeed;
             }
 
-            Stamina -= 0.05;
+            Stamina -= 0.05 * 60; // Adjusted for 60 FPS baseline
             if (Stamina < 0) Stamina = 0;
         }
     }

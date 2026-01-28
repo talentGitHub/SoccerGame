@@ -25,6 +25,17 @@ public class AIController
         }
     }
 
+    public void UpdateAI(Team team, Player? excludePlayer)
+    {
+        foreach (var player in _engine.Players)
+        {
+            if (player.Team == team && player.Id != excludePlayer?.Id)
+            {
+                UpdatePlayerAI(player);
+            }
+        }
+    }
+
     private void UpdatePlayerAI(Player player)
     {
         if (player.HasBall)
