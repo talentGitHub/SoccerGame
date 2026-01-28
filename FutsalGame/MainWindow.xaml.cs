@@ -435,26 +435,6 @@ public partial class MainWindow : Window
             _gameTimer.Start();
             _lastUpdate = DateTime.Now;
         }
-        else if (_selectedPlayer != null && _selectedPlayer.HasBall)
-        {
-            // Kick ball
-            Vector kickDirection = new Vector(1, 0);
-            if (_selectedPlayer.Team == Team.Red)
-            {
-                kickDirection = new Vector(1, 0); // Kick right
-            }
-            else
-            {
-                kickDirection = new Vector(-1, 0); // Kick left
-            }
-
-            // Add vertical component based on movement
-            if (_isWPressed) kickDirection.Y -= 0.5;
-            if (_isSPressed) kickDirection.Y += 0.5;
-
-            kickDirection.Normalize();
-            _gameEngine.KickBall(_selectedPlayer, kickDirection, 12.0);
-        }
         else
         {
             // Toggle pause
@@ -469,5 +449,105 @@ public partial class MainWindow : Window
         _lastUpdate = DateTime.Now;
         UpdateUI();
         Render();
+    }
+
+    private void PassButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_selectedPlayer == null || !_selectedPlayer.HasBall || !_gameTimer.IsEnabled)
+            return;
+
+        // Find nearest teammate to pass to
+        Player? bestTeammate = null;
+        double bestDistance = double.MaxValue;
+
+        foreach (var player in _gameEngine.Players)
+        {
+            if (player.Team == _selectedPlayer.Team && player.Id != _selectedPlayer.Id)
+            {
+                double distance = GetDistance(_selectedPlayer.Position, player.Position);
+                if (distance < bestDistance && distance > 30) // Must be at least 30 pixels away
+                {
+                    bestDistance = distance;
+                    bestTeammate = player;
+                }
+            }
+        }
+
+        if (bestTeammate != null)
+        {
+            // Calculate pass direction
+            Vector passDirection = new Vector(
+                bestTeammate.Position.X - _selectedPlayer.Position.X,
+                bestTeammate.Position.Y - _selectedPlayer.Position.Y
+            );
+            passDirection.Normalize();
+            
+            // Pass with moderate power
+            _gameEngine.KickBall(_selectedPlayer, passDirection, 8.0);
+            
+            // Show feedback
+            ActionStatusText.Text = $"Passed to {bestTeammate.Role}!";
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+            timer.Tick += (s, args) =>
+            {
+                ActionStatusText.Text = "";
+                timer.Stop();
+            };
+            timer.Start();
+        }
+        else
+        {
+            ActionStatusText.Text = "No teammate in range!";
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+            timer.Tick += (s, args) =>
+            {
+                ActionStatusText.Text = "";
+                timer.Stop();
+            };
+            timer.Start();
+        }
+    }
+
+    private void KickButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_selectedPlayer == null || !_selectedPlayer.HasBall || !_gameTimer.IsEnabled)
+            return;
+
+        // Kick towards goal
+        Vector kickDirection = new Vector(1, 0);
+        if (_selectedPlayer.Team == Team.Red)
+        {
+            kickDirection = new Vector(1, 0); // Kick right towards blue goal
+        }
+        else
+        {
+            kickDirection = new Vector(-1, 0); // Kick left towards red goal
+        }
+
+        // Add vertical component based on current movement
+        if (_isWPressed) kickDirection.Y -= 0.5;
+        if (_isSPressed) kickDirection.Y += 0.5;
+
+        kickDirection.Normalize();
+        
+        // Kick with full power
+        _gameEngine.KickBall(_selectedPlayer, kickDirection, 15.0);
+        
+        // Show feedback
+        ActionStatusText.Text = "SHOT!";
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+        timer.Tick += (s, args) =>
+        {
+            ActionStatusText.Text = "";
+            timer.Stop();
+        };
+        timer.Start();
+    }
+
+    private double GetDistance(Point p1, Point p2)
+    {
+        double dx = p2.X - p1.X;
+        double dy = p2.Y - p1.Y;
+        return Math.Sqrt(dx * dx + dy * dy);
     }
 }

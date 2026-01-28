@@ -238,6 +238,44 @@
         .info ul {
             line-height: 1.8;
         }
+        
+        .button-pass {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .button-pass:hover {
+            background: #45a049;
+        }
+        
+        .button-kick {
+            background: #FF5722;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .button-kick:hover {
+            background: #E64A19;
+        }
+        
+        .action-status {
+            color: #ffcc00;
+            font-size: 12px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -300,7 +338,14 @@
         
         <!-- Footer with controls -->
         <div class="footer">
-            Controls: WASD (Move) | SPACE (Kick/Pause) | R (Reset)
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="flex: 1; text-align: center;">Controls: WASD (Move) | SPACE (Pause) | R (Reset)</span>
+                <div style="flex: 1; text-align: center;">
+                    <button class="button-pass">PASS</button>
+                    <button class="button-kick">KICK</button>
+                </div>
+                <span class="action-status" style="flex: 1; text-align: center;">Ready to play!</span>
+            </div>
         </div>
     </div>
     
@@ -316,8 +361,11 @@
             <li><strong>Smart AI</strong> that passes, shoots, and positions strategically</li>
             <li><strong>10-minute matches</strong> with real-time scoring and timing</li>
             <li><strong>High-quality graphics</strong> with gradients, shadows, and visual effects</li>
+            <li><strong>PASS button</strong> (green) - Pass to nearest teammate</li>
+            <li><strong>KICK button</strong> (orange) - Shoot at goal with full power</li>
         </ul>
         <p>The dashed circle indicates ball possession. The yellow border shows your controlled player.</p>
+        <p><strong>New!</strong> Use the dedicated PASS and KICK buttons for better control during gameplay!</p>
     </div>
 </body>
 </html>
